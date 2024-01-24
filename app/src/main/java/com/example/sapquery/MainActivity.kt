@@ -29,11 +29,17 @@ class MainActivity : AppCompatActivity() {
         val editText = findViewById<EditText>(R.id.editText)
         val button = findViewById<Button>(R.id.button)
         val textView = findViewById<TextView>(R.id.textView)
+        // Declare versionTextView and retrieve the version dynamically
+        val versionTextView = findViewById<TextView>(R.id.versionTextView)
+        val appVersion = packageManager.getPackageInfo(packageName, 0).applicationInfo.metaData.getString("appVersion")
+
+        // Set the version dynamically
+        versionTextView.text = "Version $appVersion"
 
         button.setOnClickListener {
             val details = editText.text.toString()
             if (details.isNotEmpty()) {
-                // Replace "YOUR_API_ENDPOINT" with your actual API endpoint
+
                 val apiUrl = "https://registrationservice333780.mock.blazemeter.com?details=$details"
                 MyAsyncTask(textView).execute(apiUrl)
             }

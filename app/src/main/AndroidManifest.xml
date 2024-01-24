@@ -26,4 +26,8 @@
         </activity>
     </application>
 
+    <meta-data
+        android:name="appVersion"
+        android:value="@string/app_version" />
+
 </manifest>
