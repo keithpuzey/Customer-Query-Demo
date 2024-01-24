@@ -9,7 +9,7 @@
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="46dp"
         android:hint="Enter Email Address"/>
 
     <Button
@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/editText"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="36dp"
         android:text="Submit"/>
 
     <TextView
@@ -27,6 +27,15 @@
         android:layout_below="@id/recyclerView"
         android:layout_marginTop="16dp"/>
 
+
+    <TextView
+        android:id="@+id/versionTextView"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_below="@id/editText"
+        android:layout_centerHorizontal="false"
+        android:text="Version 1.0.0" />
+
     <!-- Add this RecyclerView to your layout -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -34,15 +43,6 @@
         android:layout_below="@id/button"
         android:layout_marginTop="16dp"
         android:layout_height="match_parent"/>
-
-    <TextView
-        android:id="@+id/versionTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/recyclerView"
-        android:layout_marginTop="16dp"
-        android:layout_centerHorizontal="true"
-        android:text="Version 1.0.0" />
 
 
 </RelativeLayout>

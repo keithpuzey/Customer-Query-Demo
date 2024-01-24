@@ -29,12 +29,15 @@ class MainActivity : AppCompatActivity() {
         val editText = findViewById<EditText>(R.id.editText)
         val button = findViewById<Button>(R.id.button)
         val textView = findViewById<TextView>(R.id.textView)
-        // Declare versionTextView and retrieve the version dynamically
-        val versionTextView = findViewById<TextView>(R.id.versionTextView)
-        val appVersion = packageManager.getPackageInfo(packageName, 0).applicationInfo.metaData.getString("appVersion")
 
-        // Set the version dynamically
-        versionTextView.text = "Version $appVersion"
+        // Access the TextView
+        val versionTextView = findViewById<TextView>(R.id.versionTextView)
+
+        // Get the version string from resources
+        val version = getString(R.string.app_version)
+
+        // Set the version to the TextView
+        versionTextView.text = "Version $version"
 
         button.setOnClickListener {
             val details = editText.text.toString()
@@ -47,7 +50,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private inner class MyAsyncTask(private val textView: TextView) :
-        AsyncTask<String, Void, JSONObject>() {
+        AsyncTask<String, Void, JSONObject?>() {
 
         override fun doInBackground(vararg params: String): JSONObject? {
             val apiUrl = params[0]
@@ -63,20 +66,25 @@ class MainActivity : AppCompatActivity() {
                     response.append(line)
                 }
 
-                return JSONObject(response.toString())
+                return try {
+                    JSONObject(response.toString())
+                } catch (e: Exception) {
+                    // Handle the case where the response is not a JSON object
+                    null
+                }
             } finally {
                 urlConnection.disconnect()
             }
         }
 
         override fun onPostExecute(result: JSONObject?) {
-            result?.let {
+            if (result != null) {
                 val jsonList = mutableListOf<JsonItem>()
 
-                val keys = it.keys()
+                val keys = result.keys()
                 while (keys.hasNext()) {
                     val key = keys.next()
-                    val value = it.getString(key)
+                    val value = result.getString(key)
                     jsonList.add(JsonItem(key, value))
                 }
 
@@ -85,6 +93,9 @@ class MainActivity : AppCompatActivity() {
 
                 // Display the result in textView
                 textView.text = result.toString()
+            } else {
+                // Handle the case where the response is not a JSON object
+                textView.text = "Error: Non-JSON response received"
             }
         }
     }
