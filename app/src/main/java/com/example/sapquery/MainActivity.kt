@@ -45,6 +45,8 @@ class MainActivity : AppCompatActivity() {
 
                 val apiUrl = "https://registrationservice333780.mock.blazemeter.com?details=$details"
                 MyAsyncTask(textView).execute(apiUrl)
+                // Clear the EditText after the button is pressed
+                editText.text.clear()
             }
         }
     }
