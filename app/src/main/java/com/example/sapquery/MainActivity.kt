@@ -13,6 +13,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+import java.io.FileNotFoundException
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,7 +44,8 @@ class MainActivity : AppCompatActivity() {
             val details = editText.text.toString()
             if (details.isNotEmpty()) {
 
-                val apiUrl = "https://registrationservice333780.mock.blazemeter.com?details=$details"
+                val apiUrl =
+                    "https://registrationservice333780.mock.blazemeter.com?details=$details"
                 MyAsyncTask(textView).execute(apiUrl)
                 // Clear the EditText after the button is pressed
                 editText.text.clear()
@@ -55,11 +57,11 @@ class MainActivity : AppCompatActivity() {
         AsyncTask<String, Void, JSONObject?>() {
 
         override fun doInBackground(vararg params: String): JSONObject? {
-            val apiUrl = params[0]
-            val url = URL(apiUrl)
-            val urlConnection = url.openConnection() as HttpURLConnection
-
             try {
+                val apiUrl = params[0]
+                val url = URL(apiUrl)
+                val urlConnection = url.openConnection() as HttpURLConnection
+
                 val reader = BufferedReader(InputStreamReader(urlConnection.inputStream))
                 val response = StringBuilder()
                 var line: String?
@@ -73,9 +75,17 @@ class MainActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     // Handle the case where the response is not a JSON object
                     null
+                } finally {
+                    urlConnection.disconnect()
                 }
-            } finally {
-                urlConnection.disconnect()
+            } catch (e: FileNotFoundException) {
+                // Handle the case where the URL is not found
+                e.printStackTrace()
+                return null
+            } catch (e: Exception) {
+                // Handle other exceptions
+                e.printStackTrace()
+                return null
             }
         }
 
@@ -96,8 +106,8 @@ class MainActivity : AppCompatActivity() {
                 // Display the result in textView
                 textView.text = result.toString()
             } else {
-                // Handle the case where the response is not a JSON object
-                textView.text = "Error: Non-JSON response received"
+                // Handle the case where the response is not available
+                textView.text = "Error: Data not available"
             }
         }
     }
